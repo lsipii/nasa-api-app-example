@@ -1,7 +1,7 @@
 <script>
     import { onMount } from 'svelte'
 
-    import EpicItem from './EpicItem.svelte'
+    import EpicListItem from './EpicListItem.svelte'
     // @ts-ignore
     import imgUrl from './public/nasa-app-logo.png'
     import fetchEpicData from './services/NasaEpicService'
@@ -51,7 +51,7 @@
 <div class="container">
     <img class="logo" src={imgUrl} alt="Nasa Logo" />
 
-    <h2>NASA Epic App</h2>
+    <h2>NASA Epic API App</h2>
     {#if errorMessage.length > 0}
         ERROR: {errorMessage}
     {:else if epics === null}
@@ -59,7 +59,7 @@
     {:else}
         {#each filteredEpics as epic}
             <div class="epic-item">
-                <EpicItem {...epic} />
+                <EpicListItem {...epic} />
             </div>
         {/each}
 
