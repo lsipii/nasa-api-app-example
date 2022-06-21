@@ -72,7 +72,6 @@ func GetEpics() []EpicItem {
 		dateParts := strings.Split(items[i].Date, " ")
 		datePart := strings.Replace(dateParts[0], "-", "/", -1)
 		items[i].ImageUrl = fmt.Sprintf("https://epic.gsfc.nasa.gov/archive/natural/%s/png/%s.png", datePart, items[i].Image)
-		fmt.Println(items[i].ImageUrl)
 	}
 	return items
 }
