@@ -13,12 +13,23 @@ func getTokenUsers() map[string]string {
 }
 
 // Middleware function, which will be called for each request
-func Middleware(next http.Handler) http.Handler {
+func AuthMiddleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+
+		allowedHeaders := "Accept, Content-Type, Content-Length, Accept-Encoding, X-Auth-Token"
+		w.Header().Set("Access-Control-Allow-Origin", "*")
+		w.Header().Set("Access-Control-Allow-Headers", allowedHeaders)
+		w.Header().Set("Content-Type", "application/json; charset=utf-8")
+
+		if r.Method == "OPTIONS" {
+			w.WriteHeader(http.StatusOK)
+			return
+		}
+
 		// Authentication middleware type
 		tokenUsers := getTokenUsers()
 
-		token := r.Header.Get("X-Session-Token")
+		token := r.Header.Get("X-Auth-Token")
 
 		if user, found := tokenUsers[token]; found {
 			// We found the token in our map

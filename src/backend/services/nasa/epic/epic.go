@@ -28,7 +28,7 @@ func fetchEpicAPI() []Article {
 	return Articles
 }
 
-// Gets articles
-func GetArticles() []Article {
+// Gets the epic data
+func GetEpics() []Article {
 	return fetchEpicAPI()
 }

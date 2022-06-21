@@ -13,11 +13,10 @@ import (
 )
 
 func handleRequests() {
-	myRouter := mux.NewRouter().StrictSlash(true)
-	myRouter.HandleFunc("/", fallback)
-	myRouter.HandleFunc("/epic-api", epicApiEndpoint)
-	myRouter.Use(authentication.Middleware)
-	log.Fatal(http.ListenAndServe(":8000", myRouter))
+	router := mux.NewRouter().StrictSlash(true)
+	router.HandleFunc("/", fallback)
+	router.Handle("/epic-api", authentication.AuthMiddleware(http.HandlerFunc(epicApiEndpoint)))
+	log.Fatal(http.ListenAndServe(":8000", router))
 }
 
 func fallback(w http.ResponseWriter, r *http.Request) {
@@ -26,8 +25,8 @@ func fallback(w http.ResponseWriter, r *http.Request) {
 
 func epicApiEndpoint(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("Endpoint Hit: epicApiEndpoint")
-	articles := epic.GetArticles()
-	json.NewEncoder(w).Encode(articles)
+	epics := epic.GetEpics()
+	json.NewEncoder(w).Encode(epics)
 }
 
 func main() {
