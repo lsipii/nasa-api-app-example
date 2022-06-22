@@ -25,7 +25,11 @@ func fallback(w http.ResponseWriter, r *http.Request) {
 
 func epicApiEndpoint(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("Endpoint Hit: epicApiEndpoint")
-	epics := epic.GetEpics()
+
+	var query epic.EpicQuery
+	_ = json.NewDecoder(r.Body).Decode(&query)
+
+	epics := epic.GetEpics(query)
 	json.NewEncoder(w).Encode(epics)
 }
 

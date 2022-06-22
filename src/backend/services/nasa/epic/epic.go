@@ -25,8 +25,9 @@ type EpicItem struct {
 	AttitudeQuaternions AttitudeQuaternions `json:"attitude_quaternions"`
 	Date                string              `json:"date"`
 	Coords              Coords              `json:"coords"`
-	// Optional fields
-	ImageUrl string `json:"image_url"`
+	// Populated fields
+	ImageUrl          string `json:"image_url"`
+	ImageThumbnailUrl string `json:"image_thumbnail_url"`
 }
 
 type CentroidCoordinates struct {
@@ -62,23 +63,33 @@ type Coords struct {
 	AttitudeQuaternions AttitudeQuaternions `json:"attitude_quaternions"`
 }
 
+type EpicQuery struct {
+	Date     string `json:"date"`
+	enhanced bool   `json:"enhanced"`
+}
+
 // EpicResponseItems cache ...
 var EpicResponseItems []EpicItem
 
 // Gets the epic data
-func GetEpics() []EpicItem {
-	items := fetchEpicAPI()
+func GetEpics(query EpicQuery) []EpicItem {
+
+	items := fetchEpicAPI(query)
 	for i, _ := range items {
+		// Populate image urls
 		dateParts := strings.Split(items[i].Date, " ")
 		datePart := strings.Replace(dateParts[0], "-", "/", -1)
 		items[i].ImageUrl = fmt.Sprintf("https://epic.gsfc.nasa.gov/archive/natural/%s/png/%s.png", datePart, items[i].Image)
+		items[i].ImageThumbnailUrl = fmt.Sprintf("https://epic.gsfc.nasa.gov/archive/natural/%s/thumbs/%s.jpg", datePart, items[i].Image)
 	}
 	return items
 }
 
-func fetchEpicAPI() []EpicItem {
+func fetchEpicAPI(query EpicQuery) []EpicItem {
 	//apiKey := ""
-	apiEndpointQueryUrl := "https://api.nasa.gov/EPIC/api/natural?api_key=DEMO_KEY"
+	imageType := "natural"
+
+	apiEndpointQueryUrl := fmt.Sprintf("https://api.nasa.gov/EPIC/api/%s?api_key=DEMO_KEY", imageType)
 	EpicResponseItems := getJsonDataFromAPIUrl(apiEndpointQueryUrl)
 
 	return EpicResponseItems
