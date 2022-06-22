@@ -12,7 +12,13 @@ Utilizes a [NASA EPIC API](https://epic.gsfc.nasa.gov/about/api) for data.
 
 ```
 cd src/backend
+mkdir -p .cache/pkg
 make start
+```
+OR just by:
+
+```
+docker run --rm -ti -p 8000:8000 lsipii/nasa-api-app-example-api
 ```
 
 **Frontend:**
