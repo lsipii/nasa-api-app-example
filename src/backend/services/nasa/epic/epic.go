@@ -65,7 +65,11 @@ type Coords struct {
 
 type EpicQuery struct {
 	Date     string `json:"date"`
-	enhanced bool   `json:"enhanced"`
+	Enhanced bool   `json:"enhanced"`
+}
+type ParsedEpicQuery struct {
+	Date      string
+	ImageType string
 }
 
 // EpicResponseItems cache ...
@@ -74,25 +78,50 @@ var EpicResponseItems []EpicItem
 // Gets the epic data
 func GetEpics(query EpicQuery) []EpicItem {
 
-	items := fetchEpicAPI(query)
+	parsedQuery := parseEpicQuery(query)
+	items := fetchEpicAPI(parsedQuery)
 	for i, _ := range items {
 		// Populate image urls
 		dateParts := strings.Split(items[i].Date, " ")
 		datePart := strings.Replace(dateParts[0], "-", "/", -1)
-		items[i].ImageUrl = fmt.Sprintf("https://epic.gsfc.nasa.gov/archive/natural/%s/png/%s.png", datePart, items[i].Image)
-		items[i].ImageThumbnailUrl = fmt.Sprintf("https://epic.gsfc.nasa.gov/archive/natural/%s/thumbs/%s.jpg", datePart, items[i].Image)
+		items[i].ImageUrl = fmt.Sprintf("https://epic.gsfc.nasa.gov/archive/%s/%s/png/%s.png", parsedQuery.ImageType, datePart, items[i].Image)
+		items[i].ImageThumbnailUrl = fmt.Sprintf("https://epic.gsfc.nasa.gov/archive/%s/%s/thumbs/%s.jpg", parsedQuery.ImageType, datePart, items[i].Image)
 	}
 	return items
 }
 
-func fetchEpicAPI(query EpicQuery) []EpicItem {
+func fetchEpicAPI(query ParsedEpicQuery) []EpicItem {
 	//apiKey := ""
-	imageType := "natural"
 
-	apiEndpointQueryUrl := fmt.Sprintf("https://api.nasa.gov/EPIC/api/%s?api_key=DEMO_KEY", imageType)
+	queryString := query.ImageType
+	if len(query.Date) > 0 {
+		queryString = queryString + "date/" + query.Date
+	}
+
+	apiEndpointQueryUrl := fmt.Sprintf("https://api.nasa.gov/EPIC/api/%s?api_key=DEMO_KEY", queryString)
 	EpicResponseItems := getJsonDataFromAPIUrl(apiEndpointQueryUrl)
 
 	return EpicResponseItems
+}
+
+func parseEpicQuery(query EpicQuery) ParsedEpicQuery {
+	imageType := "natural"
+	date := ""
+
+	if query.Enhanced {
+		imageType = "enhanced"
+	}
+	if len(query.Date) > 0 {
+		dateParts := strings.Split(query.Date, "T")
+		date = dateParts[0]
+	}
+
+	parsedStruct := ParsedEpicQuery{
+		ImageType: imageType,
+		Date:      date,
+	}
+
+	return parsedStruct
 }
 
 // @see: https://blog.alexellis.io/golang-json-api-client/

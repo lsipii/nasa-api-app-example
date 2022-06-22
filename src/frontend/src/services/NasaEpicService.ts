@@ -1,3 +1,4 @@
+import { ensureObject } from '@lsipii/transformation-helpers/Objects'
 import nasaApi from '../config/nasa-api'
 
 export type EpicItem = {
@@ -60,9 +61,7 @@ export default async function fetchEpicData(
             'Content-Type': 'application/json; charset=utf-8',
             'X-Auth-Token': nasaApi.clientAuthToken,
         },
-        body: JSON.stringify({
-            filters: currentFilters,
-        }),
+        body: JSON.stringify(ensureObject(currentFilters)),
     })
 
     const resposeItems = await response.json()

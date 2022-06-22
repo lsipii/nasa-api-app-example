@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"log"
 	"net/http"
 
@@ -26,8 +27,22 @@ func fallback(w http.ResponseWriter, r *http.Request) {
 func epicApiEndpoint(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("Endpoint Hit: epicApiEndpoint")
 
-	var query epic.EpicQuery
-	_ = json.NewDecoder(r.Body).Decode(&query)
+	var query = epic.EpicQuery{}
+
+	body, err := ioutil.ReadAll(r.Body)
+	if err != nil {
+		if err != nil {
+			http.Error(w, "Bad request", http.StatusBadRequest)
+		}
+	}
+	if len(body) > 0 {
+		err = json.Unmarshal(body, &query)
+		if err != nil {
+			http.Error(w, "Could parse request", http.StatusBadRequest)
+		}
+	}
+
+	fmt.Println("query", query)
 
 	epics := epic.GetEpics(query)
 	json.NewEncoder(w).Encode(epics)
