@@ -98,40 +98,41 @@
     {#if errorMessage.length > 0}
         ERROR: {errorMessage}
     {/if}
+
+    <div class="inner-container">
+        <div class="search-inputs">
+            <div class="search-btn">
+                <button
+                    on:click={() => fetchData()}
+                    disabled={!hasActiveFilters}>Search</button
+                >
+            </div>
+
+            Date filter
+            <div>
+                <DateInput
+                    bind:value={currentFilters.date}
+                    format="yyyy-MM-dd"
+                    placeholder="date"
+                    on:select={() => onFiltersChanged()}
+                />
+            </div>
+
+            <label for="enhanced">Enhanced</label>
+            <div>
+                <input
+                    id="enhanced"
+                    type="checkbox"
+                    bind:checked={currentFilters.enhanced}
+                    on:change={() => onFiltersChanged()}
+                />
+            </div>
+        </div>
+    </div>
+
     {#if epics === null}
         Loading Epics...
     {:else}
-        <div class="inner-container">
-            <div class="search-inputs">
-                <div class="search-btn">
-                    <button
-                        on:click={() => fetchData()}
-                        disabled={!hasActiveFilters}>Search</button
-                    >
-                </div>
-
-                Date filter
-                <div>
-                    <DateInput
-                        bind:value={currentFilters.date}
-                        format="yyyy-MM-dd"
-                        placeholder="date"
-                        on:select={() => onFiltersChanged()}
-                    />
-                </div>
-
-                <label for="enhanced">Enhanced</label>
-                <div>
-                    <input
-                        id="enhanced"
-                        type="checkbox"
-                        bind:checked={currentFilters.enhanced}
-                        on:change={() => onFiltersChanged()}
-                    />
-                </div>
-            </div>
-        </div>
-
         {#each epicsVisible as epic}
             <div class="epic-item">
                 <EpicListItem {...epic} />
@@ -181,12 +182,8 @@
     button {
         font-size: 14px;
         background-color: white;
-        appearance: none;
     }
     button:hover {
         background: lightseagreen;
-    }
-    button:focus {
-        outline: none;
     }
 </style>
