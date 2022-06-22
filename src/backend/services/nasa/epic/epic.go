@@ -91,14 +91,14 @@ func GetEpics(query EpicQuery) []EpicItem {
 }
 
 func fetchEpicAPI(query ParsedEpicQuery) []EpicItem {
-	//apiKey := ""
+	apiKey := "DEMO_KEY"
 
 	queryString := query.ImageType
 	if len(query.Date) > 0 {
 		queryString = queryString + "date/" + query.Date
 	}
 
-	apiEndpointQueryUrl := fmt.Sprintf("https://api.nasa.gov/EPIC/api/%s?api_key=DEMO_KEY", queryString)
+	apiEndpointQueryUrl := fmt.Sprintf("https://api.nasa.gov/EPIC/api/%s?api_key=%s", queryString, apiKey)
 	EpicResponseItems := getJsonDataFromAPIUrl(apiEndpointQueryUrl)
 
 	return EpicResponseItems
