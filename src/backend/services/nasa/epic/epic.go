@@ -1,4 +1,3 @@
-// https://epic.gsfc.nasa.gov/about/api
 package epic
 
 import (
@@ -7,6 +6,7 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"os"
 	"strings"
 	"time"
 )
@@ -92,6 +92,11 @@ func GetEpics(query EpicQuery) []EpicItem {
 
 func fetchEpicAPI(query ParsedEpicQuery) []EpicItem {
 	apiKey := "DEMO_KEY"
+
+	apiKeyFromEnv, ok := os.LookupEnv("NASA_EPIC_API_KEY")
+	if ok {
+		apiKey = apiKeyFromEnv
+	}
 
 	queryString := query.ImageType
 	if len(query.Date) > 0 {

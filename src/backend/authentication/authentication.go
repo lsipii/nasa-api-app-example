@@ -3,12 +3,20 @@ package authentication
 import (
 	"log"
 	"net/http"
+	"os"
 )
 
 // Very simple access control list
 func getTokenUsers() map[string]string {
+
+	userToken := "05f717e5"
+	userTokenFromEnv, ok := os.LookupEnv("APP_USER_TOKEN")
+	if ok {
+		userToken = userTokenFromEnv
+	}
+
 	return map[string]string{
-		"05f717e5": "test user",
+		userToken: "authenticated user",
 	}
 }
 
