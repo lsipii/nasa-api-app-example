@@ -1,5 +1,5 @@
-.cache/*
-!.cache/.gitkeep
+.cache/**
+!.cache/pkg/.gitkeep
 vendor
 app
 *.out
