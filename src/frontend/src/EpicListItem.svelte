@@ -5,12 +5,14 @@
     export let caption
     export let identifier
     export let coordinates
+    export let date
 </script>
 
 <div class="epic-item">
     <div class="epic-item-left" transition:fly={{ y: 20, duration: 300 }}>
         <div class="epic-item-label">
             Identifier: {identifier} <br />
+            Date: {date} <br />
             Longitude: {coordinates.longitude} <br />
             Latitude: {coordinates.latitude}
         </div>

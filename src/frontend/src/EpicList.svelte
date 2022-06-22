@@ -48,6 +48,7 @@
                     latitude: epic.coords.centroid_coordinates.lat,
                     longitude: epic.coords.centroid_coordinates.lon,
                 },
+                date: epic.date,
             }
         })
     }
