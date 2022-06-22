@@ -64,11 +64,9 @@
     //
     let pageSize = 5
     let currentlyShown = 0
-    let canShowMore = false
     $: epicsVisible = epics ? epics.slice(0, currentlyShown) : []
     function showMore() {
         currentlyShown += pageSize
-        canShowMore
     }
 
     //
