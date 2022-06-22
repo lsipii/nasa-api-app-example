@@ -1,5 +1,26 @@
 import nasaApi from '../config/nasa-api'
 
+export type EpicItem = {
+    identifier: string
+    caption: string
+    image: string
+    image_url: string
+    version: string
+    centroid_coordinates: CentroidCoordinates
+    dscovr_j2000_position: DscovrJ2000Position
+    lunar_j2000_position: LunarJ2000Position
+    sun_j2000_position: SunJ2000Position
+    attitude_quaternions: AttitudeQuaternions
+    date: string
+    coords: {
+        centroid_coordinates: CentroidCoordinates
+        dscovr_j2000_position: DscovrJ2000Position
+        lunar_j2000_position: LunarJ2000Position
+        sun_j2000_position: SunJ2000Position
+        attitude_quaternions: AttitudeQuaternions
+    }
+}
+
 interface CentroidCoordinates {
     lat: number
     lon: number
@@ -27,28 +48,8 @@ interface AttitudeQuaternions {
     q3: number
 }
 
-export interface EpicItem {
-    identifier: string
-    caption: string
-    image: string
-    version: string
-    centroid_coordinates: CentroidCoordinates
-    dscovr_j2000_position: DscovrJ2000Position
-    lunar_j2000_position: LunarJ2000Position
-    sun_j2000_position: SunJ2000Position
-    attitude_quaternions: AttitudeQuaternions
-    date: string
-    coords: {
-        centroid_coordinates: CentroidCoordinates
-        dscovr_j2000_position: DscovrJ2000Position
-        lunar_j2000_position: LunarJ2000Position
-        sun_j2000_position: SunJ2000Position
-        attitude_quaternions: AttitudeQuaternions
-    }
-}
-
 export default async function fetchEpicData(
-    currentFilter: string,
+    currentFilters: any,
 ): Promise<Array<EpicItem>> {
     const apiEndpoint = `${nasaApi.apiEndpointHost}/epic-api`
 
@@ -60,7 +61,7 @@ export default async function fetchEpicData(
             'X-Auth-Token': nasaApi.clientAuthToken,
         },
         body: JSON.stringify({
-            filters: currentFilter,
+            filters: currentFilters,
         }),
     })
 
