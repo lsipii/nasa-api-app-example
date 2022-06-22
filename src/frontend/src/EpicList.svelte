@@ -31,6 +31,7 @@
             currentlyShown = 5
             epics = transformToEpics(epicItems)
         } catch (error) {
+            epics = [] // allows for re-searching
             errorMessage = String(error.message)
         }
     }
@@ -95,7 +96,8 @@
     <h2>NASA Epic API App</h2>
     {#if errorMessage.length > 0}
         ERROR: {errorMessage}
-    {:else if epics === null}
+    {/if}
+    {#if epics === null}
         Loading Epics...
     {:else}
         <div class="inner-container">

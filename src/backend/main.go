@@ -42,7 +42,7 @@ func epicApiEndpoint(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	fmt.Printf("query --> %+v", query)
+	fmt.Printf("query --> %+v\n", query)
 
 	epics := epic.GetEpics(query)
 	json.NewEncoder(w).Encode(epics)

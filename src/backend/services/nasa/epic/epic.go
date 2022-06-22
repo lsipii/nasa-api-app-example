@@ -157,6 +157,7 @@ func getJsonDataFromAPIUrl(url string) []EpicItem {
 	var responseData []EpicItem
 	jsonErr := json.Unmarshal(body, &responseData)
 	if jsonErr != nil {
+		log.Printf("%s", body)
 		log.Fatal(jsonErr)
 	}
 
